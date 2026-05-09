@@ -2099,6 +2099,27 @@ func main() {
 	manualCaptchaFlag := flag.Bool("manual-captcha", false, "skip auto captcha solving, use manual mode immediately")
 	captchaSolverFlag := flag.String("captcha-solver", "v2", "auto captcha solver implementation: v1|v2")
 	flag.Parse()
+
+	opts, err := parseEnv()
+	if err == nil {
+		if c, b := opts.Get("remoteAddr"); b {
+			*host = c
+		}
+
+		if c, b := opts.Get("remotePort"); b {
+			*port = c
+		}
+
+		if c, b := opts.Get("localListen"); b {
+			*listen = c
+		}
+
+		if c, b := opts.Get("link"); b {
+			*vklink = c
+			*vlessMode = true
+		}
+	}
+
 	if *genWrapKey {
 		key, err := genWrapKeyHex()
 		if err != nil {
